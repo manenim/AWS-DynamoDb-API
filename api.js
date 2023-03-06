@@ -55,7 +55,7 @@ const getPostByAuthor = async (event) => {
         KeyConditionExpression: "author = :author",
   
         };
-        const { Items } = await db.query(params);
+        const { Items } = await db.query(params).promise();
         console.log('Items', Items)
         response.body = JSON.stringify({
             message: "Successfully retrieved post.",
@@ -73,6 +73,7 @@ const getPostByAuthor = async (event) => {
         
     }
 
+    return response;
 }
 
 const getPost = async (event) => {

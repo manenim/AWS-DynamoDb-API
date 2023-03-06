@@ -124,9 +124,22 @@ resources:
         AttributeDefinitions:
           - AttributeName: postId
             AttributeType: S
+          - AttributeName: author
+            AttributeType: S
         KeySchema:
           - AttributeName: postId
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+          #GSIs
+        GlobalSecondaryIndexes:
+          - IndexName: author-content-index
+            KeySchema:
+              - AttributeName: author
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+            ProvisionedThroughput:
+              ReadCapacityUnits: 1
+              WriteCapacityUnits: 1
