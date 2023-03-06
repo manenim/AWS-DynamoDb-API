@@ -5,6 +5,7 @@ const {
     DeleteItemCommand,
     ScanCommand,
     UpdateItemCommand,
+    QueryCommand,
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 
@@ -50,18 +51,24 @@ const getPostByAuthor = async (event) => {
         TableName: process.env.DYNAMODB_TABLE_NAME,
         IndexName: "author-content-index", // Name of the GSI
         ExpressionAttributeValues: marshall({
-            ":author":  "mani" // Specify the value of the author to query
+            ":author":  event.pathParameters.author // Specify the value of the author to query
             }),
         KeyConditionExpression: "author = :author",
   
         };
-        const { Items } = await db.query(params).promise();
-        console.log('Items', Items)
+        // const { Items } = await db.query(params).promise();
+        // console.log('Items', Items)
+        // response.body = JSON.stringify({
+        //     message: "Successfully retrieved post.",
+        //     data: Items.map((item) => unmarshall(item)),
+        // });
+        const command = new QueryCommand(params);
+        const data = await db.send(command);
+        console.log('data', data)
         response.body = JSON.stringify({
             message: "Successfully retrieved post.",
-            data: Items.map((item) => unmarshall(item)),
+            data: data.Items.map((item) => unmarshall(item)),
         });
-
     } catch (err) {
         console.error("erre",  err);
         response.statusCode = 500;
