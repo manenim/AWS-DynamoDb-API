@@ -57,6 +57,7 @@ functions:
         Action:
           - "dynamodb:UpdateItem"
         Resource: !GetAtt PostsTable.Arn
+    
   deletePost:
     handler: api.deletePost
     name: delete-post
