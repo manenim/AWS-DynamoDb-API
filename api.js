@@ -21,6 +21,7 @@ const welcome = async () => {
 
 // get post by author where author is mani and the author attribute is a global secondary index
 const getPostByAuthor = async (event) => {
+    console.log('entered')
     const response = { statusCode: 200 };
 
     const params = {
@@ -28,13 +29,13 @@ const getPostByAuthor = async (event) => {
   IndexName: 'author-content-index', // Name of the GSI
   KeyConditionExpression: 'author = :author',
   ExpressionAttributeValues: marshall({
-    ':author': { S: event.pathParameters.author } // Specify the value of the author to query
+    ':author':  event.pathParameters.author // Specify the value of the author to query
   })
 };
 
 db.query(params, (err, data) => {
   if (err) {
-    console.error(e);
+    console.error("erre",  e);
         response.statusCode = 500;
         response.body = JSON.stringify({
             message: "Failed to create post.",
@@ -42,6 +43,7 @@ db.query(params, (err, data) => {
             errorStack: e.stack,
         });
   } else {
+      console.log('data', data)
      // Returns the matching items
       response.body = JSON.stringify({
           message: "Successfully retrieved post.",
