@@ -44,7 +44,7 @@ functions:
           - "dynamodb:Query"
           - "dynamodb:Scan"
           - "dynamodb:Get*"
-        Resource: !GetAtt PostsTable.Arn
+        Resource: arn:aws:dynamodb:us-east-2:749333884984:table/posts-table-dev/index/author-content-index
   getPost:
     handler: api.getPost
     name: get-post 
