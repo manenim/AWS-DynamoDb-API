@@ -24,14 +24,7 @@ const getPostByAuthor = async (event) => {
     console.log('entered')
     const response = { statusCode: 200 };
 
-    const params = {
-  TableName: process.env.DYNAMODB_TABLE_NAME,
-  IndexName: 'author-content-index', // Name of the GSI
-  KeyConditionExpression: 'author = :author',
-  ExpressionAttributeValues: marshall({
-    ':author':  "mani" // Specify the value of the author to query
-  })
-};
+   
 
 // db.query(params, (err, data) => {
 //   if (err) {
@@ -53,6 +46,15 @@ const getPostByAuthor = async (event) => {
 // });
     
     try {
+         const params = {
+        TableName: process.env.DYNAMODB_TABLE_NAME,
+        IndexName: "author-content-index", // Name of the GSI
+        ExpressionAttributeValues: marshall({
+            ":author":  "mani" // Specify the value of the author to query
+            }),
+        KeyConditionExpression: "author = :author",
+  
+        };
         const { Items } = await db.query(params);
         console.log('Items', Items)
         response.body = JSON.stringify({
