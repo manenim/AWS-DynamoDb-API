@@ -8,6 +8,18 @@ const {
 } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 
+
+// create welcome route and return a welcome message
+const welcome = async () => {
+    return {
+        statusCode: 200,
+        body: JSON.stringify({
+            message: "Welcome to the serverless blog API!",
+        }),
+    };
+};
+
+
 const getPost = async (event) => {
     const response = { statusCode: 200 };
 
@@ -155,6 +167,7 @@ const getAllPosts = async () => {
 };
 
 module.exports = {
+    welcome,
     getPost,
     createPost,
     updatePost,
