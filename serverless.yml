@@ -36,7 +36,7 @@ functions:
     timeout: 5 # seconds
     events:
       - http:
-          path: posts/mani
+          path: posts/{author}
           method: GET
     iamRoleStatements:
       - Effect: "Allow"

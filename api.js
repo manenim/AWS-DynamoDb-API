@@ -19,36 +19,38 @@ const welcome = async () => {
     };
 };
 
-// in post table, the authors attribute have just 2 authors, mani and john. write a function to get post by author name
+// get post by author where author is mani and the author attribute is a global secondary index
 const getPostByAuthor = async (event) => {
     const response = { statusCode: 200 };
-    const params = {
-    TableName: process.env.DYNAMODB_TABLE_NAME,
-    FilterExpression: '#author = :author',
-    ExpressionAttributeNames: {
-        '#author': 'author'
-    },
-    ExpressionAttributeValues: {
-        ':author': 'mani'
-    }
-    };
 
-    dynamodb.scan(params, (e, data) => {
-    if (e) {
-        console.error(e);
+    const params = {
+  TableName: process.env.DYNAMODB_TABLE_NAME,
+  IndexName: 'author-content-index', // Name of the GSI
+  KeyConditionExpression: 'author = :author',
+  ExpressionAttributeValues: marshall({
+    ':author': { S: event.pathParameters.author } // Specify the value of the author to query
+  })
+};
+
+db.query(params, (err, data) => {
+  if (err) {
+    console.error(e);
         response.statusCode = 500;
         response.body = JSON.stringify({
-            message: "Failed to retrieve posts.",
+            message: "Failed to create post.",
             errorMsg: e.message,
             errorStack: e.stack,
         });
-    } else {
-        console.log(data.Items);
-    }
-    });
-};
+  } else {
+     // Returns the matching items
+      response.body = JSON.stringify({
+          message: "Successfully retrieved post.",
+          data: data.Items.map((item) => unmarshall(item)),
+      });
+  }
+});
 
-
+}
 
 const getPost = async (event) => {
     const response = { statusCode: 200 };
