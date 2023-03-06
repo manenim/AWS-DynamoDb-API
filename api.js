@@ -33,9 +33,15 @@ const getPostByAuthor = async (event) => {
     }
     };
 
-    dynamodb.scan(params, (err, data) => {
-    if (err) {
-        console.error(err);
+    dynamodb.scan(params, (e, data) => {
+    if (e) {
+        console.error(e);
+        response.statusCode = 500;
+        response.body = JSON.stringify({
+            message: "Failed to retrieve posts.",
+            errorMsg: e.message,
+            errorStack: e.stack,
+        });
     } else {
         console.log(data.Items);
     }
