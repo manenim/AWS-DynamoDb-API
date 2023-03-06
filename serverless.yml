@@ -29,6 +29,20 @@ functions:
         Action:
           - "dynamodb:GetItem"
         Resource: !GetAtt PostsTable.Arn
+  mani:
+    handler: api.getPostByAuthor
+    name: mani
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: posts/mani
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt PostsTable.Arn
   getPost:
     handler: api.getPost
     name: get-post 

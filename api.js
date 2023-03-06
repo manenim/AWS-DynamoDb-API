@@ -19,6 +19,30 @@ const welcome = async () => {
     };
 };
 
+// in post table, the authors attribute have just 2 authors, mani and john. write a function to get post by author name
+const getPostByAuthor = async (event) => {
+    const response = { statusCode: 200 };
+    const params = {
+    TableName: process.env.DYNAMODB_TABLE_NAME,
+    FilterExpression: '#author = :author',
+    ExpressionAttributeNames: {
+        '#author': 'author'
+    },
+    ExpressionAttributeValues: {
+        ':author': 'mani'
+    }
+    };
+
+    dynamodb.scan(params, (err, data) => {
+    if (err) {
+        console.error(err);
+    } else {
+        console.log(data.Items);
+    }
+    });
+};
+
+
 
 const getPost = async (event) => {
     const response = { statusCode: 200 };
@@ -173,4 +197,5 @@ module.exports = {
     updatePost,
     deletePost,
     getAllPosts,
+    getPostByAuthor
 };
