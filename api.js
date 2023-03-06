@@ -33,24 +33,43 @@ const getPostByAuthor = async (event) => {
   })
 };
 
-db.query(params, (err, data) => {
-  if (err) {
-    console.error("erre",  e);
+// db.query(params, (err, data) => {
+//   if (err) {
+//     console.error("erre",  e);
+//         response.statusCode = 500;
+//         response.body = JSON.stringify({
+//             message: "Failed to create post.",
+//             errorMsg: e.message,
+//             errorStack: e.stack,
+//         });
+//   } else {
+//       console.log('data', data)
+//      // Returns the matching items
+//       response.body = JSON.stringify({
+//           message: "Successfully retrieved post.",
+//           data: data.Items.map((item) => unmarshall(item)),
+//       });
+//   }
+// });
+    
+    try {
+        const { Items } = await db.query(params);
+        console.log('Items', Items)
+        response.body = JSON.stringify({
+            message: "Successfully retrieved post.",
+            data: Items.map((item) => unmarshall(item)),
+        });
+
+    } catch (err) {
+        console.error("erre",  err);
         response.statusCode = 500;
         response.body = JSON.stringify({
-            message: "Failed to create post.",
-            errorMsg: e.message,
-            errorStack: e.stack,
+            message: "Failed to find posts.",
+            errorMsg: err.message,
+            errorStack: err.stack,
         });
-  } else {
-      console.log('data', data)
-     // Returns the matching items
-      response.body = JSON.stringify({
-          message: "Successfully retrieved post.",
-          data: data.Items.map((item) => unmarshall(item)),
-      });
-  }
-});
+        
+    }
 
 }
 
