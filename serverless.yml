@@ -41,7 +41,7 @@ functions:
     iamRoleStatements:
       - Effect: "Allow"
         Action:
-          - "dynamodb:Query"
+          - "dynamodb:Query"  # this is how you comment things in YAML
           - "dynamodb:Scan"
           - "dynamodb:Get*"
         Resource: arn:aws:dynamodb:us-east-2:749333884984:table/posts-table-dev/index/author-content-index
