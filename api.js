@@ -29,7 +29,7 @@ const getPostByAuthor = async (event) => {
   IndexName: 'author-content-index', // Name of the GSI
   KeyConditionExpression: 'author = :author',
   ExpressionAttributeValues: marshall({
-    ':author':  event.pathParameters.author // Specify the value of the author to query
+    ':author':  "mani" // Specify the value of the author to query
   })
 };
 
