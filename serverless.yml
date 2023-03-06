@@ -130,8 +130,8 @@ resources:
           - AttributeName: postId
             KeyType: HASH
         ProvisionedThroughput:
-          ReadCapacityUnits: 1
-          WriteCapacityUnits: 1
+          ReadCapacityUnits: 10
+          WriteCapacityUnits: 10
           #GSIs
         GlobalSecondaryIndexes:
           - IndexName: author-content-index
