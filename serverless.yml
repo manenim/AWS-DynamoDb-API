@@ -10,10 +10,31 @@ provider:
 
 custom:
   postsTableName: posts-table-${self:provider.stage}
+
+  swaggerUi:
+  
+    # [Optional] The content-type of the export. Currently application/json and application/yaml are supported for exportType of oas30 and swagger.
+    accepts: application/yaml # default value
+    # [Optional] For exportType oas30 and swagger, any combination of the following parameters are supported: extensions='integrations' or extensions='apigateway' will export the API with x-amazon-apigateway-integration extensions. extensions='authorizers' will export the API with x-amazon-apigateway-authorizer extensions. postman will export the API with Postman extensions, allowing for import to the Postman tool.
+    extensions: integrations # default value
+    # [Optional] The name of local directory to build Swagger UI static site
+    swaggerUiDirectoryName: .swagger-ui # default value
+    # [Optional] Swagger UI configuration. See https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/ . 'configUrl' and 'url' will be ignored.
+    swaggerUiConfig: # default value is the below
+      dom_id: '#swagger-ui'
+      deepLinking: true
+      presets:
+        - SwaggerUIBundle.presets.apis
+        - SwaggerUIStandalonePreset
+      plugins:
+        - SwaggerUIBundle.plugins.DownloadUrl
+      layout:
+        - StandaloneLayout
  
 
 plugins:
-  - serverless-auto-swagger
+#  - serverless-auto-swagger
+  - serverless-plugin-swagger-ui
   - serverless-iam-roles-per-function
 
 functions:
@@ -119,48 +140,6 @@ functions:
           - "dynamodb:Scan"
         Resource: !GetAtt PostsTable.Arn
 
-  #function for the serverless-auto-swagger documentation
-  swagger:
-    handler: node_modules/serverless-auto-swagger/handler/swagger.handler
-    events:
-      - http:
-          path: /api-docs
-          method: get
-          cors: true
-    restApiId: pl6lyeh3h5
-    stageName: dev
-    swagger:
-        basePath: /api-docs
-        info:
-          title: My API
-          version: '1.0'
-        paths:
-          /:
-            get:
-              produces:
-                - text/html
-              responses:
-                '200':
-                  description: Swagger UI
-                  schema:
-                    type: string
-              x-amazon-apigateway-any-method:
-                produces:
-                  - text/html
-                responses:
-                  '200':
-                    description: Swagger UI
-                    schema:
-                      type: string
-              x-amazon-apigateway-integration:
-                type: mock
-                requestTemplates:
-                  application/json: '{ "statusCode": 200 }'
-                responses:
-                  default:
-                    statusCode: 200
-                    responseTemplates:
-                      application/json: '{}'
         
     
 resources:
@@ -192,44 +171,3 @@ resources:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
 
-# Swagger documentation
-
-documentation:
-  title: My Serverless API
-  version: 1.0.0
-  description: This API provides endpoints to manage user data.
-  basepath: /
-  # Define API Gateway settings
-  apiGateway:
-    shouldStartNameWithService: true
-    binaryMediaTypes:
-      - 'image/png'
-      - 'image/jpeg'
-    minimumCompressionSize: 1024
-    description: My Serverless API Gateway
-    metrics:
-      - name: Latency
-        unit: milliseconds
-      - name: IntegrationLatency
-        unit: milliseconds
-    logging:
-      accessLogging: true
-      executionLogging: true
-    endpointConfiguration:
-      types:
-        - REGIONAL
-    cors:
-      origins:
-        - '*'
-      headers:
-        - Authorization
-        - Content-Type
-      methods:
-        - OPTIONS
-        - POST
-        - GET
-        - PUT
-        - PATCH
-        - DELETE
-        
- 

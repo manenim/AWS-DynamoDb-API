@@ -13,6 +13,7 @@
   },
   "devDependencies": {
     "jest": "^29.5.0",
-    "serverless-auto-swagger": "^2.12.0"
+    "serverless-auto-swagger": "^2.12.0",
+    "serverless-plugin-swagger-ui": "^1.1.1"
   }
 }
