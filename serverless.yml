@@ -10,31 +10,11 @@ provider:
 
 custom:
   postsTableName: posts-table-${self:provider.stage}
-
-  swaggerUi:
-  
-    # [Optional] The content-type of the export. Currently application/json and application/yaml are supported for exportType of oas30 and swagger.
-    accepts: application/yaml # default value
-    # [Optional] For exportType oas30 and swagger, any combination of the following parameters are supported: extensions='integrations' or extensions='apigateway' will export the API with x-amazon-apigateway-integration extensions. extensions='authorizers' will export the API with x-amazon-apigateway-authorizer extensions. postman will export the API with Postman extensions, allowing for import to the Postman tool.
-    extensions: integrations # default value
-    # [Optional] The name of local directory to build Swagger UI static site
-    swaggerUiDirectoryName: .swagger-ui # default value
-    # [Optional] Swagger UI configuration. See https://swagger.io/docs/open-source-tools/swagger-ui/usage/configuration/ . 'configUrl' and 'url' will be ignored.
-    swaggerUiConfig: # default value is the below
-      dom_id: '#swagger-ui'
-      deepLinking: true
-      presets:
-        - SwaggerUIBundle.presets.apis
-        - SwaggerUIStandalonePreset
-      plugins:
-        - SwaggerUIBundle.plugins.DownloadUrl
-      layout:
-        - StandaloneLayout
- 
-
+  autoSwagger:
+    restApiId: pl6lyeh3h5
+    restApiRootResourceId: uukm11wy2l
 plugins:
-#  - serverless-auto-swagger
-  - serverless-plugin-swagger-ui
+  - serverless-auto-swagger
   - serverless-iam-roles-per-function
 
 functions:
