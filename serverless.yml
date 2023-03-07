@@ -10,8 +10,11 @@ provider:
 
 custom:
   postsTableName: posts-table-${self:provider.stage}
+  autoSwagger:
+    basePath: /swagger
 
 plugins:
+  - serverless-auto-swagger
   - serverless-iam-roles-per-function
 
 functions:
