@@ -12,8 +12,8 @@ custom:
   postsTableName: posts-table-${self:provider.stage}
 
 plugins:
-  - serverless-iam-roles-per-function
   - serverless-auto-swagger
+  - serverless-iam-roles-per-function
 
 functions:
   welcome:
@@ -146,3 +146,45 @@ resources:
             ProvisionedThroughput:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
+
+# Swagger documentation
+
+documentation:
+  title: My Serverless API
+  version: 1.0.0
+  description: This API provides endpoints to manage user data.
+  basepath: /
+  # Define API Gateway settings
+  apiGateway:
+    shouldStartNameWithService: true
+    binaryMediaTypes:
+      - 'image/png'
+      - 'image/jpeg'
+    minimumCompressionSize: 1024
+    description: My Serverless API Gateway
+    metrics:
+      - name: Latency
+        unit: milliseconds
+      - name: IntegrationLatency
+        unit: milliseconds
+    logging:
+      accessLogging: true
+      executionLogging: true
+    endpointConfiguration:
+      types:
+        - REGIONAL
+    cors:
+      origins:
+        - '*'
+      headers:
+        - Authorization
+        - Content-Type
+      methods:
+        - OPTIONS
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+        
+ 
