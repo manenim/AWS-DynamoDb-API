@@ -10,10 +10,7 @@ provider:
   apiGateway:
     restApiId:
       Ref: ApiGatewayRestApi
-    restApiRootResourceId:
-      Fn::GetAtt:
-        - ApiGatewayRestApi
-        - RootResourceId
+    restApiRootResourceId: uukm11wy2l
 
 custom:
   postsTableName: posts-table-${self:provider.stage}
