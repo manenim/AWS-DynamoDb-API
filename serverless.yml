@@ -13,41 +13,7 @@ custom:
  
 
 plugins:
-  - serverless-auto-swagger:
-      swagger:
-        basePath: /api-docs
-        info:
-          title: My API
-          version: '1.0'
-        paths:
-          /:
-            get:
-              produces:
-                - text/html
-              responses:
-                '200':
-                  description: Swagger UI
-                  schema:
-                    type: string
-              x-amazon-apigateway-any-method:
-                produces:
-                  - text/html
-                responses:
-                  '200':
-                    description: Swagger UI
-                    schema:
-                      type: string
-              x-amazon-apigateway-integration:
-                type: mock
-                requestTemplates:
-                  application/json: '{ "statusCode": 200 }'
-                responses:
-                  default:
-                    statusCode: 200
-                    responseTemplates:
-                      application/json: '{}'
-      restApiId: pl6lyeh3h5
-      stageName: dev
+  - serverless-auto-swagger
   - serverless-iam-roles-per-function
 
 functions:
@@ -153,6 +119,50 @@ functions:
           - "dynamodb:Scan"
         Resource: !GetAtt PostsTable.Arn
 
+  #function for the serverless-auto-swagger documentation
+  swagger:
+    handler: node_modules/serverless-auto-swagger/handler/swagger.handler
+    events:
+      - http:
+          path: /api-docs
+          method: get
+          cors: true
+    restApiId: pl6lyeh3h5
+    stageName: dev
+    swagger:
+        basePath: /api-docs
+        info:
+          title: My API
+          version: '1.0'
+        paths:
+          /:
+            get:
+              produces:
+                - text/html
+              responses:
+                '200':
+                  description: Swagger UI
+                  schema:
+                    type: string
+              x-amazon-apigateway-any-method:
+                produces:
+                  - text/html
+                responses:
+                  '200':
+                    description: Swagger UI
+                    schema:
+                      type: string
+              x-amazon-apigateway-integration:
+                type: mock
+                requestTemplates:
+                  application/json: '{ "statusCode": 200 }'
+                responses:
+                  default:
+                    statusCode: 200
+                    responseTemplates:
+                      application/json: '{}'
+        
+    
 resources:
   Resources:
     PostsTable:
@@ -182,3 +192,44 @@ resources:
               ReadCapacityUnits: 1
               WriteCapacityUnits: 1
 
+# Swagger documentation
+
+documentation:
+  title: My Serverless API
+  version: 1.0.0
+  description: This API provides endpoints to manage user data.
+  basepath: /
+  # Define API Gateway settings
+  apiGateway:
+    shouldStartNameWithService: true
+    binaryMediaTypes:
+      - 'image/png'
+      - 'image/jpeg'
+    minimumCompressionSize: 1024
+    description: My Serverless API Gateway
+    metrics:
+      - name: Latency
+        unit: milliseconds
+      - name: IntegrationLatency
+        unit: milliseconds
+    logging:
+      accessLogging: true
+      executionLogging: true
+    endpointConfiguration:
+      types:
+        - REGIONAL
+    cors:
+      origins:
+        - '*'
+      headers:
+        - Authorization
+        - Content-Type
+      methods:
+        - OPTIONS
+        - POST
+        - GET
+        - PUT
+        - PATCH
+        - DELETE
+        
+ 
